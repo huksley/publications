@@ -10,7 +10,6 @@ const PublicationComponent = (props: any) => {
       <h1>{props.title}</h1>
       <p>{props.text}</p>
       _id: {props._id}
-
     </div>
   );
 };
@@ -20,9 +19,14 @@ const PublicationsComponent = (props: any) => {
   return (
     <div>
       {props.publications.map((publication: any) => {
-        return <PublicationComponent key={publication._id} title={publication.title}
-        _id={publication._id}
-        text={publication.text} />;
+        return (
+          <PublicationComponent
+            key={publication._id}
+            title={publication.title}
+            _id={publication._id}
+            text={publication.text}
+          />
+        );
       })}
     </div>
   );
@@ -53,27 +57,28 @@ const AddPublicationComponent = (props: any) => {
 
   return (
     <div>
-      <input type="text" onChange={
-        (e) => {
+      <input
+        type="text"
+        onChange={(e) => {
           setTitle(e.target.value);
-        }
-
-      } />
-      <input type="text" onChange={
-        (e) => {
+        }}
+      />
+      <input
+        type="text"
+        onChange={(e) => {
           setText(e.target.value);
-        }
-      } />
-      <button onClick={
-        () => {
+        }}
+      />
+      <button
+        onClick={() => {
           props.onAdd(title, text);
-        }
-      }>Add</button>
+        }}
+      >
+        Add
+      </button>
     </div>
   );
 };
-
-
 
 const App = () => {
   const [publications, setPublications] = React.useState([]);
@@ -87,10 +92,11 @@ const App = () => {
       .then((data) => {
         console.info("Publications fetched", data);
         setPublications(data);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.error("Error fetching publications", error);
         setError(error);
-      })
+      });
   }, []);
 
   // Add error boundary
@@ -100,46 +106,54 @@ const App = () => {
 
   return (
     <div>
-      <SearchComponent onSearch={(event: any) => {
-        console.log(event.target.value);
-        fetch(`/api/publications?search=${event.target.value}`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.info("Publications fetched", data);
-          setPublications(data);
-        });
-      }}/>
+      <SearchComponent
+        onSearch={(event: any) => {
+          console.log(event.target.value);
+          fetch(`/api/publications?search=${event.target.value}`)
+            .then((response) => response.json())
+            .then((data) => {
+              console.info("Publications fetched", data);
+              setPublications(data);
+            });
+        }}
+      />
 
-      <button onClick={() => {
-        // Show add publication form
-        setShowAddPublicationForm(true);
-      }}>Add publication</button>
+      <button
+        onClick={() => {
+          // Show add publication form
+          setShowAddPublicationForm(true);
+        }}
+      >
+        Add publication
+      </button>
 
-{showAddPublicationForm ? <AddPublicationComponent 
-onAdd={
-  (title: string, text: string) => {
-    fetch("/api/publications", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        title,
-        text
-      })
-    }).then((response) => response.json())
-    .then((data) => {
-      console.info("Publication added", data);
-      setPublications([...publications, data]);
-      setShowAddPublicationForm(false)
-    });
-  }
-} />
- : <div>
-
-<PublicationsComponent publications={publications} />
-      {publications.length === 0 && <p>No publications found</p>}
-  </div>}
+      {showAddPublicationForm ? (
+        <AddPublicationComponent
+          onAdd={(title: string, text: string) => {
+            fetch("/api/publications", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title,
+                text,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.info("Publication added", data);
+                setPublications([...publications, data]);
+                setShowAddPublicationForm(false);
+              });
+          }}
+        />
+      ) : (
+        <div>
+          <PublicationsComponent publications={publications} />
+          {publications.length === 0 && <p>No publications found</p>}
+        </div>
+      )}
     </div>
   );
 };
