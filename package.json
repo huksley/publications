@@ -1,0 +1,34 @@
+{
+  "name": "copilot1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.5.0",
+    "connect-livereload": "^0.6.1",
+    "esbuild": "^0.16.10",
+    "esbuild-runner": "^2.2.2",
+    "express": "^4.18.2",
+    "livereload": "^0.9.3",
+    "livereload-js": "^3.4.1",
+    "mongoose": "^6.8.1",
+    "nanoid": "^3.3.4",
+    "nodemon": "^2.0.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "nodemonConfig": {
+    "execMap": {
+      "ts": "node"
+    },
+    "env": {
+      "NODE_OPTIONS": "-r esbuild-runner/register"
+    }
+  }
+}
